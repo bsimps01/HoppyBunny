@@ -8,19 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		1B13E00B249416B4006BDC8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B13E00A249416B4006BDC8A /* AppDelegate.swift */; };
-		1B13E00D249416B4006BDC8A /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E00C249416B4006BDC8A /* GameScene.sks */; };
 		1B13E00F249416B4006BDC8A /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E00E249416B4006BDC8A /* Actions.sks */; };
 		1B13E011249416B4006BDC8A /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B13E010249416B4006BDC8A /* GameScene.swift */; };
 		1B13E013249416B4006BDC8A /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B13E012249416B4006BDC8A /* GameViewController.swift */; };
 		1B13E016249416B4006BDC8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E014249416B4006BDC8A /* Main.storyboard */; };
 		1B13E018249416B8006BDC8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E017249416B8006BDC8A /* Assets.xcassets */; };
 		1B13E01B249416B8006BDC8A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E019249416B8006BDC8A /* LaunchScreen.storyboard */; };
+		1B13E02324971D11006BDC8A /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E02224971D11006BDC8A /* GameScene.sks */; };
+		1B13E025249720FE006BDC8A /* Hero.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E024249720FE006BDC8A /* Hero.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1B13E007249416B4006BDC8A /* HoppyBunny.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoppyBunny.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B13E00A249416B4006BDC8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1B13E00C249416B4006BDC8A /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		1B13E00E249416B4006BDC8A /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		1B13E010249416B4006BDC8A /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		1B13E012249416B4006BDC8A /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -28,6 +28,8 @@
 		1B13E017249416B8006BDC8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1B13E01A249416B8006BDC8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B13E01C249416B8006BDC8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1B13E02224971D11006BDC8A /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		1B13E024249720FE006BDC8A /* Hero.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Hero.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +63,8 @@
 			isa = PBXGroup;
 			children = (
 				1B13E00A249416B4006BDC8A /* AppDelegate.swift */,
-				1B13E00C249416B4006BDC8A /* GameScene.sks */,
+				1B13E02224971D11006BDC8A /* GameScene.sks */,
+				1B13E024249720FE006BDC8A /* Hero.sks */,
 				1B13E00E249416B4006BDC8A /* Actions.sks */,
 				1B13E010249416B4006BDC8A /* GameScene.swift */,
 				1B13E012249416B4006BDC8A /* GameViewController.swift */,
@@ -132,8 +135,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B13E016249416B4006BDC8A /* Main.storyboard in Resources */,
-				1B13E00D249416B4006BDC8A /* GameScene.sks in Resources */,
+				1B13E02324971D11006BDC8A /* GameScene.sks in Resources */,
 				1B13E018249416B8006BDC8A /* Assets.xcassets in Resources */,
+				1B13E025249720FE006BDC8A /* Hero.sks in Resources */,
 				1B13E01B249416B8006BDC8A /* LaunchScreen.storyboard in Resources */,
 				1B13E00F249416B4006BDC8A /* Actions.sks in Resources */,
 			);
