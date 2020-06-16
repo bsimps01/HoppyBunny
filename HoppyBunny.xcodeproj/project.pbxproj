@@ -16,6 +16,7 @@
 		1B13E01B249416B8006BDC8A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E019249416B8006BDC8A /* LaunchScreen.storyboard */; };
 		1B13E02324971D11006BDC8A /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E02224971D11006BDC8A /* GameScene.sks */; };
 		1B13E025249720FE006BDC8A /* Hero.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1B13E024249720FE006BDC8A /* Hero.sks */; };
+		1BBBBAFA24988DFF0027726D /* cgfloat+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBBBAF924988DFF0027726D /* cgfloat+extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		1B13E01C249416B8006BDC8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B13E02224971D11006BDC8A /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		1B13E024249720FE006BDC8A /* Hero.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Hero.sks; sourceTree = "<group>"; };
+		1BBBBAF924988DFF0027726D /* cgfloat+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "cgfloat+extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 			children = (
 				1B13E00A249416B4006BDC8A /* AppDelegate.swift */,
 				1B13E02224971D11006BDC8A /* GameScene.sks */,
+				1BBBBAF924988DFF0027726D /* cgfloat+extensions.swift */,
 				1B13E024249720FE006BDC8A /* Hero.sks */,
 				1B13E00E249416B4006BDC8A /* Actions.sks */,
 				1B13E010249416B4006BDC8A /* GameScene.swift */,
@@ -152,6 +155,7 @@
 			files = (
 				1B13E011249416B4006BDC8A /* GameScene.swift in Sources */,
 				1B13E013249416B4006BDC8A /* GameViewController.swift in Sources */,
+				1BBBBAFA24988DFF0027726D /* cgfloat+extensions.swift in Sources */,
 				1B13E00B249416B4006BDC8A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
