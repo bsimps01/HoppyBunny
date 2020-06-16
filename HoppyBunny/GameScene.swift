@@ -12,6 +12,7 @@ import GameplayKit
 class GameScene: SKScene {
     
     var hero: SKSpriteNode!
+    var scrollLayer: SKNode!
     var sinceTouch : CFTimeInterval = 0
     
     override func didMove(to view: SKView) {
@@ -21,6 +22,9 @@ class GameScene: SKScene {
 
         /* allows the hero to animate when it's in the GameScene */
         hero.isPaused = false
+        
+        /* Set reference to scroll layer node */
+        scrollLayer = self.childNode(withName: "scrollLayer")
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -48,6 +52,7 @@ class GameScene: SKScene {
             
         /* Apply falling rotation */
         let fixedDelta: CFTimeInterval = 1.0 / 60.0 /* 60 FPS */
+        let scrollSpeed: CGFloat = 100
         
         if sinceTouch > 0.2 {
             let impulse = -20000 * fixedDelta
@@ -60,6 +65,30 @@ class GameScene: SKScene {
 
         /* Update last touch timer */
         sinceTouch += fixedDelta
+            
+        func scrollWorld() {
+          /* Scroll World */
+          scrollLayer.position.x -= scrollSpeed * CGFloat(fixedDelta)
+        
+            /* Loop through scroll layer nodes */
+            for ground in scrollLayer.children as! [SKSpriteNode] {
+
+              /* Get ground node position, convert node position to scene space */
+              let groundPosition = scrollLayer.convert(ground.position, to: self)
+
+              /* Check if ground sprite has left the scene */
+              if groundPosition.x <= -ground.size.width / 2 {
+
+                  /* Reposition ground sprite to the second starting position */
+                  let newPosition = CGPoint(x: (self.size.width / 2) + ground.size.width, y: groundPosition.y)
+
+                  /* Convert new node position back to scroll layer space */
+                  ground.position = self.convert(newPosition, to: scrollLayer)
+              }
+            }
+        }
+        /* Process world scrolling */
+        scrollWorld()
     }
 }
 }
