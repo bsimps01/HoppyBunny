@@ -26,6 +26,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     /* Game management */
     var gameState: GameSceneState = .active
+    var scoreLabel: SKLabelNode!
+    var points = 0
+    let fixedDelta: CFTimeInterval = 1.0 / 60.0 /* 60 FPS */
+    let scrollSpeed: CGFloat = 100
     
     override func didMove(to view: SKView) {
         /* Setup your scene here */
@@ -39,7 +43,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scrollLayer = self.childNode(withName: "scrollLayer")
         
         /* Set reference to obstacle Source node */
-        obstacleSource = self.childNode(withName: "obstacle")
+        obstacleSource = self.childNode(withName: "//obstacle")
         
         /* Set reference to obstacle layer node */
         obstacleLayer = self.childNode(withName: "obstacleLayer")
@@ -65,16 +69,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             /* Restart game scene */
             skView?.presentScene(scene)
             
-            /* Hide restart button */
-            self.buttonRestart.state = .MSButtonNodeStateHidden
+            
             
         }
+        /* Hide restart button */
+        self.buttonRestart.state = .MSButtonNodeStateHidden
+        scoreLabel = (self.childNode(withName: "scoreLabel") as! SKLabelNode)
+        
+        /* Reset Score label */
+        scoreLabel.text = "\(points)"
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         /* Disable touch if game state is not active */
         if gameState != .active { return }
         /* Called when a touch begins */
+        
+        /* Reset velocity, helps improve response against cumulative falling velocity */
+        hero.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
         
         /* Apply vertical impulse */
         hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
@@ -85,12 +97,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Reset touch timer */
         sinceTouch = 0
         
-        /* Reset velocity, helps improve response against cumulative falling velocity */
-        hero.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
         /* Hero touches anything, game over */
+        
+        /* Get references to bodies involved in collision */
+        let contactA = contact.bodyA
+        let contactB = contact.bodyB
+        
+        /* Get references to the physics body parent nodes */
+        let nodeA = contactA.node!
+        let nodeB = contactB.node!
+        
+        /* Did our hero pass through the 'goal'? */
+        if nodeA.name == "goal" || nodeB.name == "goal" {
+            
+            /* Increment points */
+            points += 1
+            
+            /* Update score label */
+            scoreLabel.text = String(points)
+            
+            /* We can return now */
+            return
+        }
         
         /* Ensure only called while game running */
         if gameState != .active { return }
@@ -131,6 +162,65 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         buttonRestart.state = .MSButtonNodeStateActive
     }
     
+    func scrollWorld() {
+        /* Scroll World */
+        scrollLayer.position.x -= scrollSpeed * CGFloat(fixedDelta)
+        
+        /* Loop through scroll layer nodes */
+        for ground in scrollLayer.children as! [SKSpriteNode] {
+            
+            /* Get ground node position, convert node position to scene space */
+            let groundPosition = scrollLayer.convert(ground.position, to: self)
+            
+            /* Check if ground sprite has left the scene */
+            if groundPosition.x <= -ground.size.width / 2 {
+                
+                /* Reposition ground sprite to the second starting position */
+                let newPosition = CGPoint(x: (self.size.width / 2) + ground.size.width, y: groundPosition.y)
+                
+                /* Convert new node position back to scroll layer space */
+                ground.position = self.convert(newPosition, to: scrollLayer)
+            }
+        }
+    }
+    func updateObstacles() {
+        /* Update Obstacles */
+        
+        obstacleLayer.position.x -= scrollSpeed * CGFloat(fixedDelta)
+        
+        /* Loop through obstacle layer nodes */
+        for obstacle in obstacleLayer.children as! [SKReferenceNode] {
+            
+            /* Get obstacle node position, convert node position to scene space */
+            let obstaclePosition = obstacleLayer.convert(obstacle.position, to: self)
+            
+            /* Check if obstacle has left the scene */
+            if obstaclePosition.x <= -26 {
+                // 26 is one half the width of an obstacle
+                
+                /* Remove obstacle node from obstacle layer */
+                obstacle.removeFromParent()
+            }
+            
+        }
+        /* Time to add a new obstacle? */
+        if spawnTimer >= 1.5 {
+            
+            /* Create a new obstacle by copying the source obstacle */
+            let newObstacle = obstacleSource.copy() as! SKNode
+            obstacleLayer.addChild(newObstacle)
+            
+            /* Generate new obstacle position, start just outside screen and with a random y value */
+            let randomPosition =  CGPoint(x: 347, y: CGFloat.random(in: 234...382))
+            
+            /* Convert new node position back to obstacle layer space */
+            newObstacle.position = self.convert(randomPosition, to: obstacleLayer)
+            
+            // Reset spawn timer
+            spawnTimer = 0
+        }
+    }
+    
     
     override func update(_ currentTime: TimeInterval) {
         /* Skip game update if game no longer active */
@@ -143,88 +233,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Check and cap vertical velocity */
         if velocityY > 400 {
             hero.physicsBody?.velocity.dy = 400
-            
-            /* Apply falling rotation */
-            let fixedDelta: CFTimeInterval = 1.0 / 60.0 /* 60 FPS */
-            let scrollSpeed: CGFloat = 100
-            
-            if sinceTouch > 0.2 {
-                let impulse = -20000 * fixedDelta
-                hero.physicsBody?.applyAngularImpulse(CGFloat(impulse))
-            }
-            
-            /* Clamp rotation */
-            hero.zRotation.clamp(v1: CGFloat(-90).degreesToRadians(), CGFloat(30).degreesToRadians())
-            hero.physicsBody?.angularVelocity.clamp(v1: -1, 3)
-            
-            /* Update last touch timer */
-            sinceTouch += fixedDelta
-            
-            func scrollWorld() {
-                /* Scroll World */
-                scrollLayer.position.x -= scrollSpeed * CGFloat(fixedDelta)
-                
-                /* Loop through scroll layer nodes */
-                for ground in scrollLayer.children as! [SKSpriteNode] {
-                    
-                    /* Get ground node position, convert node position to scene space */
-                    let groundPosition = scrollLayer.convert(ground.position, to: self)
-                    
-                    /* Check if ground sprite has left the scene */
-                    if groundPosition.x <= -ground.size.width / 2 {
-                        
-                        /* Reposition ground sprite to the second starting position */
-                        let newPosition = CGPoint(x: (self.size.width / 2) + ground.size.width, y: groundPosition.y)
-                        
-                        /* Convert new node position back to scroll layer space */
-                        ground.position = self.convert(newPosition, to: scrollLayer)
-                    }
-                }
-            }
-            func updateObstacles() {
-                /* Update Obstacles */
-                
-                obstacleLayer.position.x -= scrollSpeed * CGFloat(fixedDelta)
-                
-                /* Loop through obstacle layer nodes */
-                for obstacle in obstacleLayer.children as! [SKReferenceNode] {
-                    
-                    /* Get obstacle node position, convert node position to scene space */
-                    let obstaclePosition = obstacleLayer.convert(obstacle.position, to: self)
-                    
-                    /* Check if obstacle has left the scene */
-                    if obstaclePosition.x <= -26 {
-                        // 26 is one half the width of an obstacle
-                        
-                        /* Remove obstacle node from obstacle layer */
-                        obstacle.removeFromParent()
-                    }
-                    
-                }
-                /* Time to add a new obstacle? */
-                if spawnTimer >= 1.5 {
-                    
-                    /* Create a new obstacle by copying the source obstacle */
-                    let newObstacle = obstacleSource.copy() as! SKNode
-                    obstacleLayer.addChild(newObstacle)
-                    
-                    /* Generate new obstacle position, start just outside screen and with a random y value */
-                    let randomPosition =  CGPoint(x: 347, y: CGFloat.random(in: 234...382))
-                    
-                    /* Convert new node position back to obstacle layer space */
-                    newObstacle.position = self.convert(randomPosition, to: obstacleLayer)
-                    
-                    // Reset spawn timer
-                    spawnTimer = 0
-                }
-            }
-            /* Process world scrolling */
-            scrollWorld()
-            
-            /* Process obstacles */
-            updateObstacles()
-            
-            spawnTimer+=fixedDelta
         }
+        /* Apply falling rotation */
+        
+        
+        if sinceTouch > 0.2 {
+            let impulse = -20000 * fixedDelta
+            hero.physicsBody?.applyAngularImpulse(CGFloat(impulse))
+        }
+        
+        /* Clamp rotation */
+        hero.zRotation.clamp(v1: CGFloat(-90).degreesToRadians(), CGFloat(30).degreesToRadians())
+        hero.physicsBody?.angularVelocity.clamp(v1: -1, 3)
+        
+        /* Update last touch timer */
+        sinceTouch += fixedDelta
+        
+        /* Process world scrolling */
+        scrollWorld()
+        
+        /* Process obstacles */
+        updateObstacles()
+        
+        spawnTimer+=fixedDelta
+        
+        
     }
+    
 }
